@@ -1,20 +1,25 @@
-Prime Properties
-Project Overview
+
+**Project Overview**
+
 Prime Properties is a comprehensive real estate platform built using the MERN stack. It offers a seamless experience for buyers, sellers, and administrators to manage property listings, communicate, and handle administrative tasks.
 
-Main Features
-User Management
+**Main Features**
+
+**User Management**
 Register User
 Login
 Search/Filter Property
-Property Management
+**Property Management**
 Create Post for Property
-Delete Post
-Chat System
+Delete property
+Edit property
+**Chat System**
 Chat between Buyer and Seller
-Admin
+**Admin**
 Approve/Reject Property Posts
-Project Structure
+
+**Project Structure**
+
 Backend: Node.js, Express.js, MongoDB, Mongoose
 Frontend: React.js
 Authentication: JWT
