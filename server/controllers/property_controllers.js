@@ -14,7 +14,7 @@ export const createProperty = async (req, res) => {
 
         // Create a new Property instance
         const newProperty = new Property({
-            ownerId: req.body.ownerId, // Assumed to be in valid ObjectId format
+            ownerId: req.userId, // Assumed to be in valid ObjectId format
             name: req.body.name,
             address: req.body.address,
             city: req.body.city,
@@ -26,7 +26,7 @@ export const createProperty = async (req, res) => {
             garage: garage,
             numberOfPortions: numberOfPortions,
             type: req.body.type,
-            timeOfCreation: new Date(req.body.timeOfCreation), // Ensure valid date format
+             // Ensure valid date format
             images: req.imagesBase64 || [], // Handle multiple images
             status: 'pending'
         });

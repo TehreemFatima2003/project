@@ -1,4 +1,5 @@
-import UserModel from './UserModel.js';
+import UserModel from '../models/UserModel.js';
+import PropertyModel from '../models/property_model.js'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 
@@ -8,7 +9,7 @@ export const getUsers=async (req,res)=>
     try{
         const result=await UserModel.find();
         if (!result)
-             return res.send("no user record find");
+            return res.send("no user record find");
         res.send(result);
     }
     catch(error)
@@ -174,17 +175,18 @@ export const addPropertyInSavedProperty = async (req, res) => {
   {
     try{
 
-        const findUser=await UserModel.findOne({ _id: req.userId});
+        const postedProperty=await PropertyModel.find({ownerId: req.userId});
+        
 
-        console.log("poster property by you : ",findUser.postedProperties)
+        console.log("poster property by you : ",postedProperty)
 
-        if(!findUser)
+        if(!postedProperty)
             return res.status(404).json("user not found")
 
-        if (findUser.postedProperties.length==0)
+        if (postedProperty.length==0)
             return res.status(200).json("no postings so far")
 
-        res.status(200).json(findUser.postedProperties);
+        res.status(200).json(postedProperty);
     }
 
     catch(error)
@@ -198,13 +200,14 @@ export const addPropertyInSavedProperty = async (req, res) => {
       try{
         const { propertyId }= req.params;
 
-        const findUser=await UserModel.findOne({_id : req.userId});
+       const findProperty=await PropertyModel.findOne({ _id: propertyId});
 
-        if(!findUser)
-            return res.status(404).json("user not found");
+       if (!findProperty)
+           return res.status(404).json("no property found")
 
-        findUser.postedProperties=findUser.postedProperties.filter((properties)=> properties!=propertyId)
-        await findUser.save();
+        await PropertyModel.deleteOne({ _id : propertyId});
+
+        res.status(200).json("post deleted");
       }
       
       catch(error)
