@@ -15,11 +15,13 @@ import {
 from "../controllers/property_controllers.js"
 
 import { encodeImagesToBase64, uploadMultiple } from '../middleware/imageMiddleware.js';
+import { auth } from '../middleware/auth.js';
 
 
 const router = express.Router();
 
-router.post('/' , uploadMultiple , encodeImagesToBase64 ,createProperty);
+// router.post('/' , uploadMultiple , encodeImagesToBase64 ,acreateProperty);
+router.post('/' , auth , uploadMultiple , encodeImagesToBase64  ,createProperty);
 
 // search by id
 router.get('/:property_id', getPropertyById);
@@ -41,9 +43,9 @@ router.get('/owner/:ownerId' , getPropertiesByOwnerId);
 
 router.get('/', displayProperties);
 
-router.delete('/:property_id', removeProperty);
+router.delete('/:property_id',auth, removeProperty);
 
-router.patch('/:property_id', updateProperty);
+router.patch('/:property_id', auth , uploadMultiple , encodeImagesToBase64, updateProperty);
 
 
 export default router;
