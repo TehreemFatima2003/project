@@ -26,6 +26,8 @@ export const createProperty = async (req, res) => {
             garage: garage,
             numberOfPortions: numberOfPortions,
             type: req.body.type,
+           timeOfCreation: { type: Date, default: Date.now},
+             // Ensure valid date format
             images: req.imagesBase64 || [], // Handle multiple images
             status: 'pending'
         });
