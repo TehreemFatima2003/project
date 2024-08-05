@@ -26,6 +26,7 @@ export const createProperty = async (req, res) => {
             garage: garage,
             numberOfPortions: numberOfPortions,
             type: req.body.type,
+           timeOfCreation: { type: Date, default: Date.now},
              // Ensure valid date format
             images: req.imagesBase64 || [], // Handle multiple images
             status: 'pending'
@@ -74,6 +75,7 @@ export const getPropertyByPrice = async (req, res) => {
         // Convert minPrice and maxPrice to numbers
         const min = parseFloat(minPrice);
         const max = parseFloat(maxPrice);
+    
         // Find properties within the specified price range
         const properties = await Property.find({
             price: { $gte: min, $lte: max }
@@ -154,33 +156,22 @@ export const removeProperty = async (req, res) => {
 export const updateProperty = async (req, res) => {
     try {
         const { property_id } = req.params;
-
-        // Check if files are uploaded in the request
-        if (req.files) {
-            console.log("in the middleware")
-            // Manually call the middleware functions
-            await new Promise((resolve, reject) => {
-                // Mimic a middleware chain
-                uploadMultiple(req, res, (err) => {
-                    if (err) return reject(err);
-                    encodeImagesToBase64(req, res, (err) => {
-                        if (err) return reject(err);
-                        resolve();
-                    });
-                });
-            });
-        }
+        console.log("in the update function...");
+        console.log("req body is:", req.body);
 
         // Prepare update data
         const updateData = { ...req.body };
+
+        // Check if Base64 encoded images are available
         if (req.imagesBase64) {
-            console.log("images base is:" , req.imagesBase64)
+            console.log("Images are converted to base64 strings");
             updateData.images = req.imagesBase64; // Use the Base64 encoded images
         }
 
         // Update the property
         const updatedProperty = await Property.findByIdAndUpdate(property_id, updateData, { new: true });
-        console.log("updated property is:" , updatedProperty)
+        console.log("Updated property is:", updatedProperty);
+
         if (!updatedProperty) {
             return res.status(404).json({ error: 'Property not found' });
         }
@@ -188,6 +179,7 @@ export const updateProperty = async (req, res) => {
         // Send the updated property as a response
         res.status(200).json(updatedProperty);
     } catch (error) {
+        console.log("Error in the catch block...");
         res.status(500).json({ error: error.message });
     }
 };
@@ -196,17 +188,35 @@ export const updateProperty = async (req, res) => {
 // export const updateProperty = async (req, res) => {
 //     try {
 //         const { property_id } = req.params;
+//         console.log("in the update function...")
+//         console.log("files are :", req.files)
+//         console.log("req body is:" , req.body)
+//         // Check if files are uploaded in the request
+//         if (req.files) {
+//             console.log("go to the middleware")
+//             // Manually call the middleware functions
+//             await new Promise((resolve, reject) => {
+//                 // Mimic a middleware chain
+//                 uploadMultiple(req, res, (err) => {
+//                     if (err) return reject(err);
+//                     encodeImagesToBase64(req, res, (err) => {
+//                         if (err) return reject(err);
+//                         resolve();
+//                     });
+//                 });
+//             });
+//         }
 
-//         // Log the incoming request
-//         console.log("Request body:", req.body);
-//         console.log("Property ID:", property_id);
+//         // Prepare update data
+//         const updateData = { ...req.body };
+//         if (req.imagesBase64) {
+//             console.log("images is converted to base64 string")
+//             updateData.images = req.imagesBase64; // Use the Base64 encoded images
+//         }
 
-//         // Update the property and return the updated document
-//         const updatedProperty = await Property.findByIdAndUpdate(property_id, req.body, { new: true });
-        
-//         // Log the updated property for debugging
-//         console.log("Updated property:", updatedProperty);
-
+//         // Update the property
+//         const updatedProperty = await Property.findByIdAndUpdate(property_id, updateData, { new: true });
+//         console.log("updated property is:" , updatedProperty)
 //         if (!updatedProperty) {
 //             return res.status(404).json({ error: 'Property not found' });
 //         }
@@ -214,6 +224,9 @@ export const updateProperty = async (req, res) => {
 //         // Send the updated property as a response
 //         res.status(200).json(updatedProperty);
 //     } catch (error) {
+//         console.log("in the catch error..")
 //         res.status(500).json({ error: error.message });
 //     }
 // };
+
+

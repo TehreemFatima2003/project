@@ -9,6 +9,7 @@ const storage = multer.diskStorage({
         cb(null, '../uploads');
     },
     filename: (req, file, cb) => {
+        console.log("go to the filename of multer")
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         cb(null, uniqueSuffix + path.extname(file.originalname));
     }
@@ -23,10 +24,9 @@ export const uploadMultiple = upload.array('images');
 // Middleware to encode images to Base64
 export const encodeImagesToBase64 = (req, res, next) => {
     if (!req.files || req.files.length === 0) {
-        return next(new Error('No files uploaded!'));
-       // return next();
+        //return next(new Error('No files uploaded!'));
+        return next();
     }
-
     const encodedImages = [];
     let processedFiles = 0;
 
