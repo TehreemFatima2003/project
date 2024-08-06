@@ -6,6 +6,7 @@ const propertySchema = new mongoose.Schema(
     name: { type: String, required: true },
     address: { type: String, required: true },
     city: { type: String, required: true },
+    area: { type: String, required: true },
     purpose: { type: String, enum: ['sale', 'rent'], required: true },
     price: { type: Number, required: true },
     description: { type: String, required: true },
@@ -16,7 +17,8 @@ const propertySchema = new mongoose.Schema(
     type: { type: String, enum: ['house', 'flat'], required: true },
     timeOfCreation: { type: Date, default: Date.now},
     images: [{ type: String, required: true }],
-    status: { type: String, enum: ['approved', 'pending', 'rejected'], default: 'pending' }
+    status: { type: String, enum: ['approved', 'pending', 'rejected'], default: 'pending' },
+    markAsDone: { type: Boolean, default: false}
 }
 );
 
