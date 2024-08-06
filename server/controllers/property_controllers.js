@@ -18,6 +18,7 @@ export const createProperty = async (req, res) => {
             name: req.body.name,
             address: req.body.address,
             city: req.body.city,
+            area: req.body.area,
             purpose: req.body.purpose,
             price: price,
             description: req.body.description,
@@ -26,10 +27,10 @@ export const createProperty = async (req, res) => {
             garage: garage,
             numberOfPortions: numberOfPortions,
             type: req.body.type,
-           timeOfCreation: { type: Date, default: Date.now},
-             // Ensure valid date format
+            timeOfCreation: { type: Date, default: Date.now},
             images: req.imagesBase64 || [], // Handle multiple images
-            status: 'pending'
+            status: 'pending',
+            markAsDone: false
         });
 
         // Save the property to the database
@@ -156,8 +157,6 @@ export const removeProperty = async (req, res) => {
 export const updateProperty = async (req, res) => {
     try {
         const { property_id } = req.params;
-        console.log("in the update function...");
-        console.log("req body is:", req.body);
 
         // Prepare update data
         const updateData = { ...req.body };

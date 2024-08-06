@@ -4,6 +4,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import PropertyRoutes from "./routes/property_routes.js"
 import userRoute from './routes/UserRoute.js'
+import adminRoutes from './routes/AdminRoute.js'
+
 
 const app  = express();
 
@@ -20,7 +22,8 @@ app.get('/',(req,res)=> {
 });
 
 app.use('/property' , PropertyRoutes);
-app.use('/users',userRoute)
+app.use('/users',userRoute);
+app.use('/admin' , adminRoutes);
 
 
 mongoose.connect(process.env.CONNECTION_URL) 

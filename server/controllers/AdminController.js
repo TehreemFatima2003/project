@@ -20,26 +20,27 @@ export const login=async (req, res)=>
 
         
         if(normalizedEmail!==getAdmin[0].email)
-            return res.status(404).json("invalid email");
-
+            return res.status(404).json({error:"invalid email"});
         
 
         const isPasswordCorrect = await bcrypt.compare(password, getAdmin[0].password);
 
         if(!isPasswordCorrect)
-            return res.status(404).json("invalid password");
+            return res.status(404).json({error:"invalid password"});
 
         const token=jwt.sign(
             {email: getAdmin.email, id:getAdmin._id},process.env.SECRET
         );
-        console.log("token: ",token)
-        res.status(200).json(token,"   admin id ", getAdmin[0]._id);
+
+        //console.log("token: ",token)
+        
+        res.status(200).json({ token, adminId: getAdmin[0]._id });
 
     }
 
     catch(error)
     {
-        res.status(404).json(error.message);
+        res.status(404).json({error: error.message});
     }
     
 }
@@ -49,12 +50,12 @@ export const login=async (req, res)=>
 export const viewPendingProperty=async (req, res)=>
 {
     try{
-         const getPending=await PropertyModel.find({status : "pending"})
+            const getPending=await PropertyModel.find({status : "pending"})
 
-         if(getPending.length == 0)
-            return res.status(404).json("no pending")
-          
-          res.status(200).json(getPending);
+            if(getPending.length == 0)
+                return res.status(404).json("no pending properties to be approved")
+            
+            res.status(200).json(getPending);
 
     }
 
@@ -68,12 +69,12 @@ export const approvePendingProperty= async (req,res)=>
 {
     try{
         const {propertyId}= req.params;
-        console.log("hello")
+        console.log("property id is:" , propertyId)
         
         const findProperty=await PropertyModel.findOne({_id : propertyId});
 
         if(!findProperty)
-            return res.send(404).json("no such property exists");
+            return res.send(404).json("no such property exists now!");
 
         const approvedProperty = await PropertyModel.findByIdAndUpdate( propertyId, { status: "approved" }, { new: true });
         console.log(" approved ",approvedProperty)
@@ -94,12 +95,12 @@ export const rejectPendingProperty= async (req,res)=>
     {
         try{
             const {propertyId}= req.params;
-            console.log("hello")
+            console.log("property id is:" , propertyId)
             
             const findProperty=await PropertyModel.findOne({_id : propertyId});
     
             if(!findProperty)
-                return res.send(404).json("no such property exists");
+                return res.send(404).json("no such property exists now !");
     
             const rejectedProperty = await PropertyModel.findByIdAndUpdate( propertyId, { status: "rejected" }, { new: true });
             console.log(" rejected ",rejectedProperty)
