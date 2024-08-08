@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import {loginAdmin} from "../../../Apis.js"
+import {loginAdmin , reject, approve,showPendingProperties} from "../../../Apis.js"
 import Cookies from "js-cookie"
+
 
 export const login = createAsyncThunk('Admin/login',
     async(data , {rejectWithValue})=> {
@@ -15,15 +16,43 @@ export const login = createAsyncThunk('Admin/login',
     }
 )
 
-// export const logout = createAsyncThunk('Admin/logout', () => {
-//     Cookies.remove('adminToken'); // Remove the cookie
-//     return;
-// });
+export const showPending = createAsyncThunk('Admin/pending',
+    async(_, {rejectWithValue}) => {
+        try {
+            const res = await showPendingProperties();
+            console.log("pending properties are:" , res);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data)   
+        }
+    }
+)
 
+export const approveProperty = createAsyncThunk('Admin/approve' , 
+    async(id , {rejectWithValue})=> {
+        try {
+            const res = await approve(id);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data)   
+        }
+    }
+)
+
+export const rejectProperty = createAsyncThunk('Admin/reject' , 
+    async(id , {rejectWithValue})=> {
+        try {
+            const res = await reject(id);
+            return res.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data)   
+        }
+    }
+)
 
 const initialState = {
     error:null,
-    //token:''
+    properties:[]
 };
 
 const adminReducer = createSlice({
@@ -45,6 +74,37 @@ const adminReducer = createSlice({
 
         .addCase(login.rejected , (state , action)=>{
             //state.error = action.error.message;
+            state.error = action.payload.error;
+        })
+
+        // .addCase(showPending.pending, (state) => {
+        //     state.status = "loading";
+        // })
+
+        .addCase(showPending.fulfilled, (state, action) => {
+            state.properties = action.payload;
+            console.log("properties set as:" , state.properties);
+        })
+
+        .addCase(showPending.rejected, (state, action) => {
+            state.error = action.payload.error;
+        })
+
+        .addCase(approveProperty.fulfilled, (state, action) => {
+            //state.properties = action.payload;
+            console.log("properties approved as:" , action.payload);
+        })
+
+        .addCase(approveProperty.rejected, (state, action) => {
+            state.error = action.payload.error;
+        })
+
+        .addCase(rejectProperty.fulfilled, (state, action) => {
+            //state.properties = action.payload;
+            console.log("properties rejected as:" , action.payload);
+        })
+
+        .addCase(rejectProperty.rejected, (state, action) => {
             state.error = action.payload.error;
         })
     }   

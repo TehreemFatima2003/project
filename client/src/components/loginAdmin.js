@@ -5,6 +5,7 @@ import { useDispatch , useSelector } from 'react-redux';
 import { login } from '../redux/features/Admin/AdminSlice';
 import Cookies from 'js-cookie'
 
+
 const LoginAdmin = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const LoginAdmin = () => {
     const [password, setPassword] = useState('');
     const {error} = useSelector((state)=> state.Admin)
 
+    
     const handleLogin = async(event) => {
         event.preventDefault();
         console.log('Login clicked with:', { email, password });
