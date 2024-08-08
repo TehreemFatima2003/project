@@ -5,8 +5,7 @@ export const API = Axios.create({
 })
 
 // creating  apis for different functions 
-export const loginAdmin = (data) => API.post(`admin/login` , data);
-// export const show_Users = ()=> API.get(`users`);
-// export const delete_User = (id)=> API.delete(`users/${id}`);
-// export const searchUser = (id)=> API.get(`users/${id}`);
-// export const update_User = (id , data)=> API.patch(`users/${id}`,data);
+export const loginAdmin = (data) => API.post('admin/login' , data);
+export const showPendingProperties = ()=> API.get('admin/view_pending');
+export const approve = (id)=> API.patch(`admin/approve_pending/${id}`);
+export const reject = (id)=> API.patch(`admin/reject_pending/${id}`);

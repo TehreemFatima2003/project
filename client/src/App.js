@@ -7,7 +7,7 @@ import AdminDashboard from "./components/Admin_dashboard.js"
 
 function App() {
   return (
-    <div className="App">
+    <div className="App font-nunito">
       <Router>
         <Routes>
           <Route path='/' element={<Landing/>}></Route>
