@@ -6,7 +6,6 @@ const HomePage = () => {
 
         <div>
             main website homepage
-            <p>zhjaha</p>
         </div>
     )
 }

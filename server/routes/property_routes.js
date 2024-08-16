@@ -1,5 +1,6 @@
 import express from 'express';
 
+
 import {
     createProperty,
     getPropertyById,
@@ -9,21 +10,25 @@ import {
     getPropertyByPrice,
     getPropertyByPurpose,
     getPropertyByType,
+    markPropertyAsDone,
     removeProperty,
     updateProperty
 } 
 from "../controllers/property_controllers.js"
 
-import { encodeImagesToBase64, uploadMultiple } from '../middleware/imageMiddleware.js';
+// import { encodeImagesToBase64, uploadMultiple } from '../middleware/imageMiddleware.js';
 import { auth } from '../middleware/auth.js';
+import upload from '../middleware/imageMiddleware.js';
 
 
 const router = express.Router();
 
-// router.post('/' , uploadMultiple , encodeImagesToBase64 ,acreateProperty);
-router.post('/' , auth , uploadMultiple , encodeImagesToBase64  ,createProperty);
+router.patch('/markproperty/:property_id', markPropertyAsDone)
 
-// search by id
+// router.post('/' , uploadMultiple , encodeImagesToBase64 ,acreateProperty);
+router.post('/', upload.single('photo'), createProperty);
+
+//search by id
 router.get('/:property_id', getPropertyById);
 
 // search by location(city)
@@ -39,13 +44,13 @@ router.get('/purpose/:purpose', getPropertyByPurpose);
 router.get('/type/:type', getPropertyByType);
 
 // search by owner id
-router.get('/owner/:ownerId' , getPropertiesByOwnerId);
+router.get('/owner' , getPropertiesByOwnerId);
 
 router.get('/', displayProperties);
 
 router.delete('/:property_id',auth, removeProperty);
 
-router.patch('/:property_id', auth , uploadMultiple , encodeImagesToBase64, updateProperty);
+router.patch('/:property_id', auth, updateProperty);
 
 
 export default router;

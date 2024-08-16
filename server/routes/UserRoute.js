@@ -13,11 +13,11 @@ router.post('/login',login);
 
 //router.get('/:id', getUserById);
 
-router.post('/savedproperty/:propertyId',auth, addPropertyInSavedProperty);
+router.post('/savedproperty', addPropertyInSavedProperty);
 
-router.get('/savedproperty',auth,viewSavedProperty)
+router.get('/savedproperty/:userId',viewSavedProperty)
 
-router.delete('/savedproperty/:propertyId', auth, removeSavedProperty)
+router.delete('/savedproperty',  removeSavedProperty)
 
 router.get('/postedproperty', auth , viewPostedProperty);
 

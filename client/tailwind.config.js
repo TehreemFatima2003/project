@@ -10,6 +10,9 @@ module.exports = {
       colors: {
         orange: '#FF5A3C', // Custom orange color
         darkblue: '#0B2C3D', // Custom dark blue color
+        mediumgrey:'#B1B1B1',
+        darkgrey:'#A7A7A7',
+        lightgrey:'#EDEDED'
       },
     },
   },
