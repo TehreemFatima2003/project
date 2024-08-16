@@ -104,9 +104,8 @@ export const getUserById=async (req,res)=>
 
 export const addPropertyInSavedProperty = async (req, res) => {
     try {
-      const { propertyId } = req.params;
-      const { userId } = req;
-
+      const { userId , propertyId } = req.body;
+      console.log("add in save property called")
       console.log("property id ",propertyId);
       console.log("user id",userId );
   
@@ -118,12 +117,13 @@ export const addPropertyInSavedProperty = async (req, res) => {
   
       // Check if the property is already saved
       if (findUser.savedProperties.includes(propertyId)) {
-        return res.status(400).json("Property already saved");
+        return res.status(200).json("Property already saved");
       }
   
       
       findUser.savedProperties.push(propertyId);
       await findUser.save();
+      console.log("saved properties: ", findUser.savedProperties)
   
       res.status(200).json({ message: "Property added to saved properties", savedProperties: findUser.savedProperties });
     } 
@@ -139,7 +139,8 @@ export const addPropertyInSavedProperty = async (req, res) => {
     try
     {
         console.log("hello from saved")
-        const findUser=await UserModel.findOne({_id: req.userId});
+        const {userId }=req.params
+        const findUser=await UserModel.findOne({_id: userId});
         if (!findUser)
             return res.status(404).json("user not found")
 
@@ -155,15 +156,19 @@ export const addPropertyInSavedProperty = async (req, res) => {
   export const removeSavedProperty=async (req,res)=>
   {
     try{
-        const { propertyId }= req.params;
+        console.log("remove from save called");
 
-        const findUser=await UserModel.findOne({_id : req.userId});
+        const {userId, property_id} =req.query;
+
+        const findUser=await UserModel.findOne({_id : userId});
 
         if(!findUser)
             return res.status(404).json("user not found");
 
-        findUser.savedProperties=findUser.savedProperties.filter((properties)=> properties!=propertyId)
+        findUser.savedProperties=findUser.savedProperties.filter((properties)=> properties!=property_id)
         await findUser.save();
+        res.json("property removed")
+        console.log("propert removed")
     }
     catch(error)
     {
