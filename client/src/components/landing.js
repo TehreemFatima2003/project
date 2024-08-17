@@ -15,7 +15,7 @@ const Landing = () => {
                 <div>
                     <button
                         className="bg-[#FF5A3C] hover:bg-[#0a2231] text-base text-white px-4 py-2 m-2 rounded shadow-lg transition duration-300"
-                        onClick={() => navigate('/user')}>
+                        onClick={() => navigate('/user/home')}>
                         User
                     </button>
                     <button
