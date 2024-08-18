@@ -14,6 +14,7 @@ import CreatePropertyForm from './components/CreatePropertyForm.js';
 import DraftPropertyPage from './components/DRaftPropertyPage.js';
 import CreatePropertyForm2 from './components/CreatePropertyForm2.js';
 import ViewSavedProperty from './components/ViewSavedProperty.js';
+import AllPropertiesPage from './components/AllProperties.js';
 
 function App() {
   return (
@@ -32,8 +33,9 @@ function App() {
             <Route path = "" element={<LoginUser/>}></Route>
             <Route path='/user/register' element= {<RegisterUser/>}></Route>
             <Route path='/user/home' element={<HomePage/>}></Route>
-            
+            <Route path='/user/properties' element={<AllPropertiesPage/>} > </Route>
           </Route>
+
           <Route path='user/savedproperty' element = {<ViewSavedProperty /> } ></Route>
 
           <Route path='seller' element={<SellerLandingPage />}>
