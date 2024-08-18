@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 import PropertyRoutes from "./routes/property_routes.js"
 import userRoute from './routes/UserRoute.js'
 import adminRoutes from './routes/AdminRoute.js'
-import bodyParser from 'body-parser';
+
 
 const app  = express();
 
