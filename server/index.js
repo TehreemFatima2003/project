@@ -7,6 +7,11 @@ import PropertyRoutes from "./routes/property_routes.js"
 import userRoute from './routes/UserRoute.js'
 import adminRoutes from './routes/AdminRoute.js'
 
+import bodyParser from 'body-parser';
+import http from 'http';
+import axios from 'axios'
+import { Server } from 'socket.io';
+
 
 const app  = express();
 
@@ -29,7 +34,12 @@ app.use('/admin' , adminRoutes);
 
 
 mongoose.connect(process.env.CONNECTION_URL) 
-.then(app.listen(process.env.PORT , ()=> { console.log(`Server is running on port: http://localhost:${process.env.PORT}`); }))
+.then(
+    app.listen(process.env.PORT , ()=> { console.log(`Server is running on port: http://localhost:${process.env.PORT}`); }
+)
+    
+)
+
 .catch((error) => console.error(error.message) );
 
 

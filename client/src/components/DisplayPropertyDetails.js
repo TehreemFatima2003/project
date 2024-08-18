@@ -1,30 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlined';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
-import { getPropertyById, removePropertyFromWishlist, savePropertyInWishlist } from '../api';
+import { getPropertyById, getSavedPropertiesFromWishlist, removePropertyFromWishlist, savePropertyInWishlist } from '../api';
+
+import { useLocation } from 'react-router-dom';
 
 const DisplayPropertyDetails = () => {
-  const [property, setProperty] = useState(null);
-  const [isSaved, setSaved] = useState(false);
+  const location= useLocation();
+  const { property} =location.state
+  // const [property, setProperty] = useState(null);
+  //const [userSaved, setUserSaved]= useState([]);
+  const [isSaved, setSaved] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const userId = '66ade13ff5858085c1b9bf4c';
 
-  const userId="66acbaf6890a33329101c110";
    //const property_id = '66b9f10e5f063b506fd5a1a4'; //with images
    //const property_id='66bee08bf48babba6f78cba6'
   //const property_id = '66b4badf845768fe9bd78781'; // with no image
-  const property_id='66b06807c39c01e7262c2849' //with no image but approved
-  const fetchProperty = async () => {
-    try {
-      const response = await getPropertyById(property_id);
-      setProperty(response.data);
-    } catch (error) {
-      console.error("Error fetching property details:", error);
+  //const property_id='66b06807c39c01e7262c2849' //with no image but approved
+
+   const getUserSavedProperties= async () =>
+   {
+    try
+    {
+      const response = await getSavedPropertiesFromWishlist(userId);
+      const userWishList=response.data;
+      console.log("response ", userWishList)
+
+      if(userWishList.includes(property._id)  )
+        setSaved(true);
+      
+      
     }
-  };
+    catch(error)
+    {
+      console.error("error: ", error)
+    }
+   }
 
   useEffect(() => {
-    fetchProperty();
-  }, []);
+    getUserSavedProperties();
+   
+  }, [userId, property.id]);
 
   const handleSave = async () => {
     setSaved((prevState) => !prevState);
@@ -32,7 +49,8 @@ const DisplayPropertyDetails = () => {
     {
         try{
           console.log("property removed from saved");
-          const queryString = `userId=${userId}&property_id=${property_id}`;
+          console.log("property id: ", property._id)
+          const queryString = `userId=${userId}&property_id=${property._id}`;
           console.log("query string : ", queryString);
           const response= await removePropertyFromWishlist( queryString );
           console.log("response: ", response.data)
@@ -50,7 +68,7 @@ const DisplayPropertyDetails = () => {
           
           const data={
             userId:userId,
-            propertyId:property_id
+            propertyId:property._id
           }
           console.log("propert  saved");
           const response= await (savePropertyInWishlist(data));

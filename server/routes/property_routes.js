@@ -26,7 +26,7 @@ const router = express.Router();
 router.patch('/markproperty/:property_id', markPropertyAsDone)
 
 // router.post('/' , uploadMultiple , encodeImagesToBase64 ,acreateProperty);
-router.post('/', upload.single('photo'), createProperty);
+//router.post('/', upload('photo'), createProperty);
 
 //search by id
 router.get('/:property_id', getPropertyById);
