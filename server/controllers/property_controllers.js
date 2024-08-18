@@ -123,7 +123,7 @@ export const getPropertyById = async (req, res) => {
             return res.status(404).json({ error: 'Property not found' });
         }
         res.status(200).json(property);
-        // console.log(property);
+        console.log(property);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
