@@ -138,13 +138,13 @@ export const addPropertyInSavedProperty = async (req, res) => {
   {
     try
     {
-        console.log("hello from saved")
         const {userId }=req.params
         const findUser=await UserModel.findOne({_id: userId});
         if (!findUser)
             return res.status(404).json("user not found")
 
         res.status(200).json(findUser.savedProperties);
+        console.log(findUser.savedProperties)
     }
     catch(error)
     {
