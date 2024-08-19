@@ -1,14 +1,23 @@
+import path from 'path';
 import Property from '../models/property_model.js';
 
 
 export const createProperty= async (req, res)=>  //with fileupload express
 {
     try {
-        const {name } = req.body
-        console.log("ehhe")
-        console.log(req.files,"file")
-        console.log("body" , req.body)
-        console.log(name,"name")
+        // const {name } = req.body
+        // console.log("ehhe")
+        // console.log(req.files,"file")
+        // console.log("body" , req.body)
+        // console.log(req.body,"name")
+    //    const data = Object.assign({}, req.body)
+    //    const files = Object.assign({}, req.file)
+    console.log(req.file, req.body)
+            const file = req.body.file;
+            const uploadPath = path.join('/', "public", "uploads", Date.now() + "-" + Math.round(Math.random() * 1e9));
+            file.mv(uploadPath, (err) => {
+                console.log(err);
+            });
   
         // Process the form data and file
         // ...
@@ -65,6 +74,11 @@ export const createProperty= async (req, res)=>  //with fileupload express
         res.status(400).json({ error: 'Property creation failed' });
       }
 }
+
+
+
+
+
 // export const createProperty = async (req, res) => {
 //     try {   
 

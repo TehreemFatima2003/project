@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import fileUpload from 'express-fileupload';
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import PropertyRoutes from "./routes/property_routes.js"
@@ -10,15 +9,20 @@ import bodyParser from 'body-parser';
 import http from 'http';
 import axios from 'axios'
 import { Server } from 'socket.io';
+import fileUpload from "express-fileupload";
 
 const app  = express();
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Optional for URL-encoded form data
-app.use(fileUpload()); // Ensure this is applied before multer and form processing
+app.use(fileUpload({
+    createParentPath: true
+})); // Ensure this is applied before multer and form processing
 
 dotenv.config();
+
+
 
 // initial route for homepage when app is started
 app.get('/',(req,res)=> { 

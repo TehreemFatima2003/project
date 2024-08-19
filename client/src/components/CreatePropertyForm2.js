@@ -16,7 +16,7 @@ const CreatePropertyForm2 = () => {
     garage: false,
     portions: '',
     type: 'house', // default value
-    images: [], // Array for file upload
+    photo: '', // Array for file upload
   });
 
   const handleChange = (e) => {
@@ -35,25 +35,25 @@ const CreatePropertyForm2 = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
+    // const files = Array.from(e.target.files);
     setProperty((prevProperty) => ({
       ...prevProperty,
-      images: files,
+      photo: e.target.files[0],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("property state: ", property);
-    console.log("images: ", property.images);
+    console.log("photo: ", property.photo);
   
     try {
       const formDataForBackend = new FormData();
       
       // Append each image individually using the 'photo' field name
-      property.images.forEach((image) => {
-        formDataForBackend.append("photo", image); // Use 'photo' as the field name
-      });
+      // property.photo.forEach((image) => {
+      //   formDataForBackend.append("photo", image); // Use 'photo' as the field name
+      // });
   
       // Append other property details
       formDataForBackend.append("name", property.name);
@@ -69,7 +69,8 @@ const CreatePropertyForm2 = () => {
       formDataForBackend.append("garage", property.garage);
       formDataForBackend.append("portions", property.portions);
       formDataForBackend.append("type", property.type);
-  
+      formDataForBackend.append("file", property.photo)
+      
       const response = await createProperty(formDataForBackend);
   
       console.log(response);

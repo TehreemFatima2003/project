@@ -18,15 +18,15 @@ from "../controllers/property_controllers.js"
 
 // import { encodeImagesToBase64, uploadMultiple } from '../middleware/imageMiddleware.js';
 import { auth } from '../middleware/auth.js';
-import upload from '../middleware/imageMiddleware.js';
+import upload from './../middleware/imageMiddleware.js';
 
 
 const router = express.Router();
 
+router.post('/add', createProperty);
 router.patch('/markproperty/:property_id', markPropertyAsDone)
 
 // router.post('/' , uploadMultiple , encodeImagesToBase64 ,acreateProperty);
-//router.post('/', upload('photo'), createProperty);
 
 //search by id
 router.get('/:property_id', getPropertyById);

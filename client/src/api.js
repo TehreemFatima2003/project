@@ -21,8 +21,9 @@ export const removePropertyFromWishlist = (queryString) => API.delete(`/users/sa
 export const getSavedPropertiesFromWishlist= (userId) => API.get(`/users/savedproperty/${userId}`);
 
 export const createProperty = (formDataForBackend) => {
-  console.log(formDataForBackend)
-    return API.post('/property', formDataForBackend, {
+  console.log(formDataForBackend);
+  
+    return API.post('/property/add' , formDataForBackend, {
       headers: {
         'Content-Type': 'multipart/form-data',
     },
