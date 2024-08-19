@@ -1,6 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import {useSelector} from 'react-redux'
+
+import houseIcon from '../assets/house-real-estate-icon.png'; 
+
 import backgroundImage from '../assets/bg6.jpg';
 import bg1 from "../assets/bg1.jpg";
 import bg2 from "../assets/bg2.jpg";
@@ -15,6 +19,7 @@ import time from "../assets/time.png"
 import money from "../assets/money.png"
 import trust from "../assets/trust.png"
 import favorite from "../assets/favorite.png"
+
 import agent1 from "../assets/agent1.jpg"
 import agent2 from "../assets/agent2.jpg"
 import agent3 from "../assets/agent3.jpg"
@@ -25,7 +30,11 @@ import Footer from './Footer';
 
 
 
+
+
 const HomePage = () => {
+
+    const navigate = useNavigate();
 
 
     const properties = [
@@ -38,11 +47,19 @@ const HomePage = () => {
     ];
 
     const locations = [
+
         { id: 1, name: 'Rawalpindi', image: city1 },
         { id: 2, name: 'Karachi', image: city2 },
         { id: 3, name: 'Lahore', image: city3 },
         { id: 4, name: 'Islamabad', image: city4 },
         { id: 5, name: 'Quetta', image: city5 },
+=======
+        { id: 1, name: 'City 1', image: city1 },
+        { id: 2, name: 'City 2', image: city2 },
+        { id: 3, name: 'Lahore', image: city3 },
+        { id: 4, name: 'Islamabad', image: city4 },
+        { id: 5, name: 'LA', image: city5 },
+
     ];
 
     const features = [
@@ -51,6 +68,7 @@ const HomePage = () => {
         { id: 3, icon: money, title: 'Financing Made Easy', text: 'We provide various financing options to suit your needs.' },
         { id: 4, icon: time, title: '24/7 Support', text: 'Our team is available around the clock to assist you.' },
     ];
+
 
     const agents = [
         { id: 1, name: 'Jenny White', title: 'Sunshine', phone: '9635872558', image: agent3 },
@@ -73,6 +91,55 @@ const HomePage = () => {
             {/* Other sections of your homepage */}
                         {/* Search Bar */}
                         <div className="bg-white p-5 rounded-md shadow-md mt-12 mx-auto max-w-4xl relative z-20 flex items-center space-x-4">
+
+    return (
+        <div className="relative bg-lightgrey">
+            <div
+                className="bg-cover bg-center h-80"
+                style={{ backgroundImage: `url(${backgroundImage})` }}
+            ></div>
+
+            <nav className="bg-white rounded-md shadow-md absolute top-5 left-10 right-10 z-10">
+                <div className="container px-5 py-3 flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                        <img src={houseIcon} alt="Home Icon" className="w-10 h-15" />
+                        <h1 className="text-2xl font-serif text-darkblue">PrimeProperties</h1>
+                    </div>
+                    
+                    <div className="flex-1 flex justify-end mr-10">
+                        <ul className="flex space-x-7 text-lg">
+                            <li><a href="#" className="hover:border-b-2 hover:pb-3 hover:border-orange">Home</a></li>
+                            <li><a href="#" className="hover:border-b-2 hover:pb-3 hover:border-orange">View All Properties</a></li>
+                            <li><a href="#" className="hover:border-b-2 hover:pb-3 hover:border-orange">Become a Seller</a></li>
+                            <li><a href="#" className="hover:border-b-2 hover:pb-3 hover:border-orange">About</a></li>
+                        </ul>
+                    </div>
+
+                    <div className="flex space-x-4">
+                        <button
+                            className="bg-orange font-light text-white py-2 px-4 rounded border border-orange hover:bg-white hover:text-black hover:font-light font-bold"
+                            onClick={() => navigate('/user')}
+                        >
+                            Login
+                        </button>
+                        <button
+                            className="bg-orange font-light text-white border border-orange hover:bg-white hover:text-black hover:font-light font-bold py-2 px-4 rounded"
+                            onClick={() => navigate('/user/register')}
+                        >
+                            Signup
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <div className="absolute flex flex-col justify-center items-center text-center text-white top-32 inset-x-px">
+                <h1 className="text-4xl font-extrabold mb-4">Find Your Dream House</h1>
+                <p className="text-2xl font-medium">From as low as $10 per day with a range of facilities.</p>
+            </div>
+
+            {/* Search Bar */}
+            <div className="bg-white p-5 rounded-md shadow-md mt-12 mx-auto max-w-4xl relative z-20 flex items-center space-x-4">
+
                 <input
                     className="border border-medgrey rounded-md shadow-md p-3 flex-1"
                     type="text"
@@ -101,6 +168,10 @@ const HomePage = () => {
                     Search
                 </button>
             </div>
+
+
+            {/* <p className="text-2xl font-semibold my-20 text-center">Our Featured Properties</p> */}
+
             <div className="text-center mb-12 my-20">
                     <p className="text-orange text-lg mb-3">Our Properties</p>
                     <h2 className="text-3xl font-bold hover:border-b">Our Featured Properties</h2>
@@ -179,6 +250,7 @@ const HomePage = () => {
                     ))}
                 </div>
             </div>
+
             
             <div className="text-center mb-12 mt-32">
     <p className="text-orange text-lg mb-3">Expertise is Here</p>
@@ -202,6 +274,7 @@ const HomePage = () => {
     </div>
 
             <Footer />
+
         </div>
     );
 };
