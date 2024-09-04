@@ -66,9 +66,9 @@ const userReducer = createSlice({
 
 
         .addCase(login.fulfilled , (state, action)=>{
-            console.log("login user completed! with token:" , action.payload.token);
-            Cookies.set('userToken' ,action.payload.token)
-            state.token = action.payload.token;
+            console.log("login user completed! with token:" , action.payload);
+            Cookies.set('userToken' ,action.payload)
+            state.token = action.payload;
             state.loggedIn = true;
             state.error = null;   // reset the error state on success
         })

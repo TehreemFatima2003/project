@@ -53,7 +53,7 @@ const HomePage = () => {
         { id: 3, name: 'Lahore', image: city3 },
         { id: 4, name: 'Islamabad', image: city4 },
         { id: 5, name: 'Quetta', image: city5 },
-=======
+
         { id: 1, name: 'City 1', image: city1 },
         { id: 2, name: 'City 2', image: city2 },
         { id: 3, name: 'Lahore', image: city3 },
@@ -77,20 +77,20 @@ const HomePage = () => {
         { id: 4, name: 'Alex Roy', title: 'Sunshine', phone: '9635872558', image: agent4 },
     ];
     
-    return (
-        <div className="relative bg-lightgrey">
-            <div className="bg-cover bg-center h-80" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
+    // return (
+    //     <div className="relative bg-lightgrey">
+    //         <div className="bg-cover bg-center h-80" style={{ backgroundImage: `url(${backgroundImage})` }}></div>
 
-            <Navbar />
+    //         <Navbar />
 
-            <div className="absolute flex flex-col justify-center items-center text-center text-white top-36 inset-x-px">
-                <h1 className="text-4xl font-extrabold mb-4">Find Your Dream House</h1>
-                <p className="text-2xl font-medium">From as low as $10 per day with a range of facilities.</p>
-            </div>
+    //         <div className="absolute flex flex-col justify-center items-center text-center text-white top-36 inset-x-px">
+    //             <h1 className="text-4xl font-extrabold mb-4">Find Your Dream House</h1>
+    //             <p className="text-2xl font-medium">From as low as $10 per day with a range of facilities.</p>
+    //         </div>
 
-            {/* Other sections of your homepage */}
-                        {/* Search Bar */}
-                        <div className="bg-white p-5 rounded-md shadow-md mt-12 mx-auto max-w-4xl relative z-20 flex items-center space-x-4">
+    //         {/* Other sections of your homepage */}
+    //                     {/* Search Bar */}
+    //                     <div className="bg-white p-5 rounded-md shadow-md mt-12 mx-auto max-w-4xl relative z-20 flex items-center space-x-4">
 
     return (
         <div className="relative bg-lightgrey">

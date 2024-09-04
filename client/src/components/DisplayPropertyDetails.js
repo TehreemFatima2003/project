@@ -3,21 +3,16 @@ import BookmarkBorderOutlinedIcon from '@mui/icons-material/BookmarkBorderOutlin
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { getPropertyById, getSavedPropertiesFromWishlist, removePropertyFromWishlist, savePropertyInWishlist } from '../api';
 
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const DisplayPropertyDetails = () => {
+  const navigate=useNavigate();
   const location= useLocation();
   const { property} =location.state
-  // const [property, setProperty] = useState(null);
-  //const [userSaved, setUserSaved]= useState([]);
+
   const [isSaved, setSaved] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const userId = '66ade13ff5858085c1b9bf4c';
-
-   //const property_id = '66b9f10e5f063b506fd5a1a4'; //with images
-   //const property_id='66bee08bf48babba6f78cba6'
-  //const property_id = '66b4badf845768fe9bd78781'; // with no image
-  //const property_id='66b06807c39c01e7262c2849' //with no image but approved
 
    const getUserSavedProperties= async () =>
    {
@@ -37,6 +32,8 @@ const DisplayPropertyDetails = () => {
       console.error("error: ", error)
     }
    }
+
+  
 
   useEffect(() => {
     getUserSavedProperties();
@@ -83,6 +80,19 @@ const DisplayPropertyDetails = () => {
      
 
   };
+
+  const handleChat =async (ownerId)=>
+  {
+    try{
+      
+
+     }
+     catch(error)
+    {
+     
+    }
+     
+  }
 
   const handlePrevClick = () => {
     setCurrentImageIndex((prevIndex) =>
@@ -156,7 +166,9 @@ const DisplayPropertyDetails = () => {
             {isSaved ? <BookmarkIcon /> : <BookmarkBorderOutlinedIcon />}
             <span className="ml-2">{isSaved ? 'Saved' : 'Save Property'}</span>
           </button>
-          <button className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600 w-1/2">Chat with seller</button>
+          <button className="bg-green-500 text-white py-2 px-6 rounded hover:bg-green-600 w-1/2"
+          onClick={()=>handleChat(property.ownerId)}
+          >Chat with seller</button>
         </div>
       </div>
 

@@ -15,6 +15,8 @@ import DraftPropertyPage from './components/DRaftPropertyPage.js';
 import CreatePropertyForm2 from './components/CreatePropertyForm2.js';
 import ViewSavedProperty from './components/ViewSavedProperty.js';
 import AllPropertiesPage from './components/AllProperties.js';
+import UpdatePropertyForm from './components/UpdatePropertyForm.js';
+import PrivateChatRoom from './components/PrivateChatRoom.js';
 
 function App() {
   return (
@@ -38,10 +40,13 @@ function App() {
 
           <Route path='user/savedproperty' element = {<ViewSavedProperty /> } ></Route>
 
+          <Route path='/user/chat' element={< PrivateChatRoom />}></Route>
+
           <Route path='seller' element={<SellerLandingPage />}>
               <Route path='/seller/viewproperty' element={ <DisplayProperty />}></Route>
               <Route path='/seller/createproperty' element={ <CreatePropertyForm2  />}></Route>
               <Route path='/seller/draftproperty' element={ <DraftPropertyPage />}></Route>
+              <Route path='/seller/editdraft' element={ <UpdatePropertyForm />}></Route>
           </Route>
           
         </Routes>

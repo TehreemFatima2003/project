@@ -5,69 +5,36 @@ import Property from '../models/property_model.js';
 export const createProperty= async (req, res)=>  //with fileupload express
 {
     try {
-        // const {name } = req.body
-        // console.log("ehhe")
-        // console.log(req.files,"file")
-        // console.log("body" , req.body)
-        // console.log(req.body,"name")
-    //    const data = Object.assign({}, req.body)
-    //    const files = Object.assign({}, req.file)
-    console.log(req.file, req.body)
-            const file = req.body.file;
-            const uploadPath = path.join('/', "public", "uploads", Date.now() + "-" + Math.round(Math.random() * 1e9));
-            file.mv(uploadPath, (err) => {
+            const file = req.files.file;
+            console.log("file path is ", file);
+            const uploadPath = "./../public/images/" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+            file.mv("./public/images/" + file.name, (err) => {
                 console.log(err);
             });
   
-        // Process the form data and file
-        // ...
+        const base64Image = file.data.toString('base64');
+        const base64ImageString = `data:${file.mimetype};base64,${base64Image}`;
 
-        // console.log("object received: ", req.body)
-        
-        // const price = parseFloat(req.body.price);
-        
-        // const bedroom = parseInt(req.body.bedroom, 10);
-       
-        // const bathroom = parseInt(req.body.bathroom, 10);
-        
-
-        // const numberOfPortions = parseInt(req.body.numberOfPortions, 10);
-        
-
-        // // Handling file uploads
-        // const images = [];
-        // if (req.files && req.files.images) {
-        //   const imageFiles = Array.isArray(req.files.images)
-        //     ? req.files.images
-        //     : [req.files.images];
+        const newProperty = new Property({
+          name: req.body.name,
+          ownerId:req.body.ownerId,
+          address:req.body.address,
+          city: req.body.city,
+          area: req.body.area,
+          purpose: req.body.purpose,
+          price: req.body.price,
+          description: req.body.description,
+          bedroom: req.body.bedrooms,
+          bathroom: req.body.bathrooms,
+          garage: req.body.garage,
+          numberOfPortions: req.body.portions,
+          type: req.body.type,
+          images:base64ImageString
+        });
+        console.log("property created: ", newProperty)
     
-        //   for (const image of imageFiles) {
-        //     const uploadPath = `uploads/${image.name}`;
-        //     await image.mv(uploadPath);
-        //     images.push(uploadPath);
-        //   }
-        // }
-        // console.log("images: ", images)
-        // const newProperty = new Property({
-        //   name: req.body.name,
-        //   ownerId:req.body.ownerId,
-        //   address:req.body.address,
-        //   city: req.body.city,
-        //   area: req.body.area,
-        //   purpose: req.body.purpose,
-        //   price: price,
-        //   description: req.body.description,
-        //   bedroom: bedroom,
-        //   bathroom: bathroom,
-        //   garage: req.body.garage,
-        //   numberOfPortions: numberOfPortions,
-        //   type: req.body.type,
-        //   images, // store file paths in the database
-        // });
-        // console.log("property created: ", newProperty)
-    
-        // await newProperty.save();
-        // res.status(201).json(newProperty);
+        await newProperty.save();
+        res.status(201).json(newProperty);
       }
        catch (error) {
         console.error('Error:', error);
@@ -75,70 +42,182 @@ export const createProperty= async (req, res)=>  //with fileupload express
       }
 }
 
+export const createPropertyAsDraft= async (req, res)=>  //with fileupload express
+{
+    try {
+
+            const file = req.files.file;
+            console.log("file path is ", file);
+            const uploadPath = "./../public/images/" + Date.now() + "-" + Math.round(Math.random() * 1e9);
+            file.mv("./public/images/" + file.name, (err) => {
+                console.log(err);
+            });
+  
+
+        const base64Image = file.data.toString('base64');
+        const base64ImageString = `data:${file.mimetype};base64,${base64Image}`;
+
+        const newProperty = new Property({
+          name: req.body.name,
+          ownerId:req.body.ownerId,
+          address:req.body.address,
+          city: req.body.city,
+          area: req.body.area,
+          purpose: req.body.purpose,
+          price: req.body.price,
+          description: req.body.description,
+          bedroom: req.body.bedrooms,
+          bathroom: req.body.bathrooms,
+          garage: req.body.garage,
+          status:"draft",
+          numberOfPortions: req.body.portions,
+          type: req.body.type,
+          images:base64ImageString
+        });
+        console.log("property created: ", newProperty)
+    
+        await newProperty.save();
+        return res.status(200).json(newProperty)
+      }
+       catch (error) {
+        console.error('Error:', error);
+        res.status(400).json({ error: 'Property creation failed' });
+      }
+}
+
+export const getPropertyByStatus= async (req, res)=>
+{
+    try
+    {
+        const {ownerId, status}= req.query;
+        console.log("status called: ", status)
+
+        if(status==="all")
+        {
+            const allData= await Property.find({ ownerId: ownerId});
+           // console.log("property iunder: all" , allData)
+            return res.status(200).json(allData)
+        }
+        else
+        {
+            const allData= await Property.find({ ownerId: ownerId, status: status});
+            // console.log(`Property unser ${status}`, allData)
+            return res.status(200).json(allData)
+        }
+
+    }
+    catch(error)
+    {
+        res.status(400).json("error: ", error)
+    }
+}
+
+export const markPropertyAsDone= async (req, res ) =>
+{
+    try{
+        console.log("called")
+        const { property_id }= req.params;
+        const property=await Property.findByIdAndUpdate({ _id: property_id}, {status: "closed"}, {new: true});
+        console.log("marked property: ", property)
+        if (property)
+            
+            {
+                console.log("closed")
+                return res.status(200).json("deal closed")
+                
+            }
+
+    }
+    catch(error)
+    {
+        console.log("error", error)
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const getDraftProperty= async (req, res )=>
+{
+    try
+    {
+        console.log("called draft")
+        const { ownerId }= req.params;
+        console.log("ownerId ; ", ownerId )
+        const drafts= await Property.find({ownerId: ownerId, status: "draft"});
+        // console.log("draft: ", drafts)
+        return res.status(200).json(drafts)
+    }
+
+    catch(error)
+    {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const submitDraftProperty = async (req, res)=>
+{
+    try{
+        const { property_id}= req.params;
+        const property=await Property.findOneAndUpdate({ _id: property_id}, {status: "pending"}, {new: true});
+        console.log(property);
+        if(property)
+            return res.status(200).json(property)
+
+    }
+    catch(error)
+    {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export const deleteProperty=async (req, res)=>
+{
+    try
+    {
+        const {property_id}= req.params;
+        const deletedProperty=await Property.findByIdAndDelete({_id: property_id});
+        if(deletedProperty)
+        {
+            console.log("deleted succesfylly")
+            return res.status(200).json("deleted")
+        }
+
+    }
+    catch(error)
+    {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 
 
 
-// export const createProperty = async (req, res) => {
-//     try {   
 
-//         console.log(req.body)
-        
-//         // Parse the price, bedroom, bathroom, numberOfPortions as number
-//         console.log("create property method invoked")
-//         const price = parseFloat(req.body.price);
-//         const bedroom = parseInt(req.body.bedroom, 10);
-//         const bathroom = parseInt(req.body.bathroom, 10);
-//         const numberOfPortions = parseInt(req.body.numberOfPortions, 10);
 
-//         const garage = req.body.garage ; // Convert string 'true'/'false' to boolean
-//        console.log("images: ", req.imagesBase64)
-       
-//         console.log("owner id: ", req.body.ownerId)
-//         // Create a new Property instance
-//         const newProperty = new Property({
-//             ownerId: req.body.ownerId, // Assumed to be in valid ObjectId format
-//             name: req.body.name,
-//             address: req.body.address,
-//             city: req.body.city,
-//             area: req.body.area,
-//             purpose: req.body.purpose,
-//             price: price,
-//             description: req.body.description,
-//             bedroom: bedroom,
-//             bathroom: bathroom,
-//             garage: garage,
-//             numberOfPortions: numberOfPortions,
-//             type: req.body.type,
-//             images: req.imagesBase64 || [], // Handle multiple images
-//             status: 'pending',
-//             markAsDone: false
-//         });
 
-//         // Save the property to the database
-//         //console.log(newProperty)
-//         const savedProperty = await newProperty.save();
-//         console.log("property saved")
-//         res.status(201).json(savedProperty);
-//     } catch (error) {
-//         console.log("error ocured")
-//         res.status(400).json({ error: error.message });
-//     }
-// };
+
+
+
+
+
 
 
 export const getPropertyById = async (req, res) => {
     try {
         
         const {property_id} = req.params;
+        console.log("property id: ", property_id)
         console.log("getPropertyById called " );
         const property = await Property.findById(property_id);
         if (!property) {
-            return res.status(404).json({ error: 'Property not found' });
+            console.log (`Property not found under id: ${ property_id}`);
+            return res.status(250).json("not found");
+            
         }
-        res.status(200).json(property);
-        console.log(property);
+          res.status(200).json(property);
+        
+        
     } catch (error) {
+        console.log("error occured ", error)
         res.status(500).json({ error: error.message });
     }
 };
@@ -186,7 +265,7 @@ export const getPropertyByPurpose = async (req, res) => {
         const { purpose } = req.params;
         const properties = await Property.find({ purpose: purpose });
         if (properties.length === 0) {
-            return res.status(404).json({ error: 'No properties found for this purpose' });
+            return res.status(250).json({ error: 'No properties found for this purpose' });
         }
         res.status(200).json(properties);
     } catch (error) {
@@ -207,32 +286,7 @@ export const getPropertyByType = async (req, res) => {
     }
 };
 
-export const getPropertiesByOwnerId = async (req, res) => {
-    try {
-        console.log("method was called")
-        const { ownerId , status} = req.query;
 
-        if(status==="all")
-        {
-            const properties=await Property.find({ownerId: ownerId});
-            return  res.status(200).json(properties)
-        }
-
-        else if(status==="done")
-            {
-                const properties=await Property.find({ownerId: ownerId, markAsDone:true});
-                return  res.status(200).json(properties)
-            }
-
-        else
-        {
-            const properties = await Property.find({ ownerId: ownerId , status:status});
-            res.status(200).json(properties);
-        }
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
 
 export const displayProperties = async (req, res) => {
     try {
@@ -259,48 +313,49 @@ export const removeProperty = async (req, res) => {
 
 export const updateProperty = async (req, res) => {
     try {
-        const { property_id } = req.params;
-
-        // Prepare update data
-        const updateData = { ...req.body };
-
+        const { property, submit } = req.body;
+        console.log("Button value: ", submit);
+    
+        // Initialize updateData with the property object
+        let updateData = { ...property };
+    
         // Check if Base64 encoded images are available
-        if (req.imagesBase64) {
+        if (req.body.imagesBase64) {
             console.log("Images are converted to base64 strings");
-            updateData.images = req.imagesBase64; // Use the Base64 encoded images
+            updateData.images = req.body.imagesBase64; // Use the Base64 encoded images
         }
-
-        // Update the property
-        const updatedProperty = await Property.findByIdAndUpdate(property_id, updateData, { new: true });
-        console.log("Updated property is:", updatedProperty);
-
-        if (!updatedProperty) {
+    
+        let updatedProperty;
+    
+        if (submit) {
+            // Update the status to 'pending' if submit is true
+            updateData.status = 'pending';
+        }
+    
+        // Update the property in the database
+        updatedProperty = await Property.findByIdAndUpdate(
+            { _id: property._id },
+            updateData,
+            { new: true } // Return the updated document
+        );
+    
+        if (updatedProperty) {
+            console.log("status property is:", updatedProperty.status);
+        } else {
+            console.log("Property not found or update failed.");
             return res.status(404).json({ error: 'Property not found' });
         }
-
+    
         // Send the updated property as a response
         res.status(200).json(updatedProperty);
     } catch (error) {
-        console.log("Error in the catch block...");
+        console.log("Error in the catch block...", error);
         res.status(500).json({ error: error.message });
     }
+    
+        
 };
 
-export const markPropertyAsDone= async (req,res) =>
-{
-    try{
-        const {property_id} = req.params;
-        const property=await Property.findByIdAndUpdate({ _id: property_id}, {markAsDone: true}, {new: true});
-        if( ! property)
-            return res.status(404)
-        return res.status(200).json(property)
-    }
 
-    catch(error)
-    {
-        res.status(400).json(error);
-    }
-     
-}
 
 

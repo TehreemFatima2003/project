@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
-import { createProperty } from '../api';
+
+import { createPropertyPost, createPropertyDraft } from '../redux/features/Property/propertySlice';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const CreatePropertyForm2 = () => {
+  const dispatch = useDispatch();
+  const {loading, error}= useSelector((state) => state.Property)
   const [property, setProperty] = useState({
     name: '',
-    ownerId: '66b067c4c39c01e7262c2847', // Example owner ID
+     //ownerId: '66b067c4c39c01e7262c2847', // Example owner ID
+    ownerId:'66ade13ff5858085c1b9bf4c', //hamna
     address: '',
     city: '',
     area: '',
@@ -71,23 +77,83 @@ const CreatePropertyForm2 = () => {
       formDataForBackend.append("type", property.type);
       formDataForBackend.append("file", property.photo)
       
-      const response = await createProperty(formDataForBackend);
+      dispatch(createPropertyPost(formDataForBackend))
+      // const response = await createProperty(formDataForBackend);
   
-      console.log(response);
+      // console.log(response);
   
-      if (response.status === 400) {
-        alert("Error occurred while creating the property. Please try again.");
-      } else {
-        alert("Property created successfully!");
-      }
+      // if (response.status === 400) {
+      //   alert("Error occurred while creating the property. Please try again.");
+      // } else {
+      //   alert("Property created successfully!");
+      //   setProperty({});
+      // }
     } catch (error) {
       console.error("Error:", error);
       alert("An error occurred. Please try again later.");
     }
   };
-  
 
+
+  const handleDraft = async (e) => {
+    e.preventDefault();
+    console.log("property state: ", property);
+    console.log("photo: ", property.photo);
   
+    try {
+      const formDataForBackend = new FormData();
+      
+      // Append each image individually using the 'photo' field name
+      // property.photo.forEach((image) => {
+      //   formDataForBackend.append("photo", image); // Use 'photo' as the field name
+      // });
+  
+      // Append other property details
+      formDataForBackend.append("name", property.name);
+      formDataForBackend.append("ownerId", property.ownerId);
+      formDataForBackend.append("address", property.address);
+      formDataForBackend.append("city", property.city);
+      formDataForBackend.append("area", property.area);
+      formDataForBackend.append("purpose", property.purpose);
+      formDataForBackend.append("price", property.price);
+      formDataForBackend.append("description", property.description);
+      formDataForBackend.append("bedrooms", property.bedrooms);
+      formDataForBackend.append("bathrooms", property.bathrooms);
+      formDataForBackend.append("garage", property.garage);
+      formDataForBackend.append("portions", property.portions);
+      formDataForBackend.append("type", property.type);
+      formDataForBackend.append("file", property.photo)
+      
+      dispatch(createPropertyDraft(formDataForBackend))
+      // const response = await createPropertyAsDraft(formDataForBackend);
+  
+      // console.log(response);
+  
+      // if (response.status === 400) {
+      //   alert("Error occurred while saving draft of  the property. Please try again.");
+      // } else {
+      //   setProperty({});
+      //   alert("Draft created successfully!");
+      // }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred. Please try again later.");
+    }
+  };
+
+  if(loading)
+    return(
+      <div>
+        Saving property.......
+      </div>
+    )
+    
+    if(error)
+      return(
+        <div>
+          oops! Something Went Wrong
+        </div>
+      )
   
 
   return (
@@ -145,6 +211,7 @@ const CreatePropertyForm2 = () => {
         <div className="flex flex-col space-y-2">
           <label className="font-semibold text-gray-700 text-sm">Purpose</label>
           <select
+           type= "text"
             name="purpose"
             value={property.purpose}
             onChange={handleChange}
@@ -152,7 +219,7 @@ const CreatePropertyForm2 = () => {
             required
           >
             <option value="rent">Rent</option>
-            <option value="buy">Buy</option>
+            <option value="sale">Sale</option>
           </select>
         </div>
 
@@ -263,6 +330,7 @@ const CreatePropertyForm2 = () => {
       <button
         type="button"
         className="w-1/2 mt-6 bg-green-600 text-white py-3 px-6 rounded-lg font-semibold text-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+        onClick={handleDraft}
       >
         Save As Draft
       </button>

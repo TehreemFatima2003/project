@@ -19,6 +19,23 @@ export const getUsers=async (req,res)=>
     }
 }
 
+export const getOwnerName= async(req, res)=>
+{
+    try{
+        const {userId}=req.params;
+        console.log("called ")
+        console.log("user id: ", userId)
+        const user=await UserModel.findOne({_id:userId});
+        console.log("name: ",user.name)
+        if( user)
+            return res.status(200).json(user.name)
+    }
+    catch(error)
+    {
+        res.send(error.message);
+    }
+}
+
 export const signUp=async (req,res)=>
 {
     const {name, email , password}=req.body;

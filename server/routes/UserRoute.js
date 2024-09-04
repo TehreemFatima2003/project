@@ -1,5 +1,5 @@
 import express from 'express'
-import { addProperty, addPropertyInSavedProperty, getUserById, getUsers, login, removePostedProperty, removeSavedProperty, signUp, viewPostedProperty, viewSavedProperty  } from '../controllers/UserController.js';
+import { addProperty, addPropertyInSavedProperty, getOwnerName, getUserById, getUsers, login, removePostedProperty, removeSavedProperty, signUp, viewPostedProperty, viewSavedProperty  } from '../controllers/UserController.js';
 import { auth } from '../middleware/auth.js';
 
 
@@ -14,6 +14,8 @@ router.post('/login',login);
 //router.get('/:id', getUserById);
 
 router.post('/savedproperty', addPropertyInSavedProperty);
+
+router.get('/:userId', getOwnerName);
 
 router.get('/savedproperty/:userId',viewSavedProperty)
 

@@ -17,8 +17,8 @@ const propertySchema = new mongoose.Schema(
     type: { type: String, enum: ['house', 'flat'], required: true },
     timeOfCreation: { type: Date, default: Date.now},
     images: [{ type: String, required: true }],
-    status: { type: String, enum: ['approved', 'pending', 'rejected'], default: 'pending' },
-    markAsDone: { type: Boolean, default: false}
+    status: { type: String, enum: ['approved', 'pending', 'rejected','draft','closed'], default: 'pending' },
+    //  markAsDone: { type: Boolean, default: false}
 }
 );
 

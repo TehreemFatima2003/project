@@ -11,10 +11,9 @@ const AdminDashboard = () => {
     const [error , setError] = useState(null);
     const propertyCode = 'PM-';
 
-    // fetch properties on mounting
     useEffect(() => {
         dispatch(showPending());
-    }, []);
+    }, [dispatch]);
 
     const handleLogout = () => {
         Cookies.remove('adminToken');
@@ -41,6 +40,7 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-100">
+            {/* Header */}
             <div className="bg-darkblue w-full p-4 flex justify-between items-center">
                 <h1 className="text-2xl text-white">Admin Dashboard</h1>
                 <button
@@ -50,54 +50,59 @@ const AdminDashboard = () => {
                 </button>
             </div>
 
-            <div className="flex-grow flex flex-col items-center justify-center">
-                <div className="w-4/5 bg-white rounded-lg shadow-2xl mb-20">
+            {/* Content */}
+            <div className="flex-grow flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+                <div className="w-full sm:w-4/5 bg-white rounded-lg shadow-2xl mb-20">
                     <h2 className="text-xl font-semibold text-darkblue p-4 border-b my-1">Pending Properties</h2>
                     {/* display error msg if any occurs */}
-                    {error && <p className="text-red-500 text-center mb-4">{error}</p>}  
-                    <table className="min-w-full bg-white">
-                        <thead className="bg-darkblue text-white">
-                            <tr>
-                                <th className="py-3 px-4">Property Id</th>
-                                <th className="py-3 px-4">Details</th>
-                                <th className="py-3 px-4" >Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {properties.length > 0 ? (
-                                properties.map((property) => (
-                                    <tr key={property._id} className="bg-gray-100 border-b">
-                                        <td className="py-3 px-4">{propertyCode + Math.floor( Math. random() * (1000 - 0) + 0)}</td>
-                                        <td className="py-3 px-4 text-left">
-                                            <p className='py-1'><span className="font-bold">Name:</span> {property.name}</p>
-                                            <p className='py-1'><span className="font-bold">Price:</span> {property.price}</p>
-                                            <p className='py-1'><span className="font-bold">Property Size:</span> {property.area}</p>
-                                            <p className='py-1'><span className="font-bold">OwnerId:</span> {property.ownerId}</p>
-                                            <p className='py-1'><span className="font-bold">Address:</span> {property.address}</p>
-                                            <p className='py-1'><span className="font-bold">City:</span> {property.city}</p>
-                                            <p className='py-1'><span className="font-bold">Purpose:</span> {property.purpose}</p>
-                                        </td>
-                                        <td className="py-3 px-4">
-                                            <button
-                                                className="bg-darkblue hover:bg-orange text-white px-3 py-2 rounded-lg transition duration-300"
-                                                onClick={() => ApproveHandler(property._id)}>
-                                                Approve
-                                            </button>
-                                            <button
-                                                className="bg-orange hover:bg-darkblue text-white ml-4 px-4 py-2 rounded-lg transition duration-300"
-                                                onClick={() => RejectHandler(property._id)}>
-                                                Reject
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
+                    {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full bg-white">
+                            <thead className="bg-darkblue text-white">
                                 <tr>
-                                    <td colSpan={3} className="text-center py-4">There are no pending properties yet</td>
+                                    <th className="py-3 px-4 text-left">Property Id</th>
+                                    <th className="py-3 px-4 text-left">Details</th>
+                                    <th className="py-3 px-4 text-left">Action</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {properties.length > 0 ? (
+                                    properties.map((property) => (
+                                        <tr key={property._id} className="bg-gray-100 border-b">
+                                            <td className="py-3 px-4">{propertyCode + Math.floor( Math.random() * (1000 - 0) + 0)}</td>
+                                            <td className="py-3 px-4 text-left">
+                                                <p className='py-1'><span className="font-bold">Name:</span> {property.name}</p>
+                                                <p className='py-1'><span className="font-bold">Price:</span> {property.price}</p>
+                                                <p className='py-1'><span className="font-bold">Property Size:</span> {property.area}</p>
+                                                <p className='py-1'><span className="font-bold">OwnerId:</span> {property.ownerId}</p>
+                                                <p className='py-1'><span className="font-bold">Address:</span> {property.address}</p>
+                                                <p className='py-1'><span className="font-bold">City:</span> {property.city}</p>
+                                                <p className='py-1'><span className="font-bold">Purpose:</span> {property.purpose}</p>
+                                            </td>
+                                            <td className="py-3 px-4">
+                                                <div className="flex flex-col md:flex-row md:space-x-4 space-y-2 md:space-y-0">
+                                                    <button
+                                                        className="bg-darkblue hover:bg-orange text-white px-3 py-2 rounded-lg transition duration-300"
+                                                        onClick={() => ApproveHandler(property._id)}>
+                                                        Approve
+                                                    </button>
+                                                    <button
+                                                        className="bg-orange hover:bg-darkblue text-white px-4 py-2 rounded-lg transition duration-300"
+                                                        onClick={() => RejectHandler(property._id)}>
+                                                        Reject
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan={3} className="text-center py-4">There are no pending properties yet</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
